@@ -1,0 +1,85 @@
+name: TrollGuard
+options:
+  bundleIdPrefix: com.troll
+  deploymentTarget:
+    iOS: "15.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: ""
+    CODE_SIGNING_REQUIRED: "NO"
+    CODE_SIGNING_ALLOWED: "NO"
+
+targets:
+  TrollGuard:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Shared
+    dependencies:
+      - target: CallDirectoryExtension
+        embed: true
+      - target: MessageFilterExtension
+        embed: true
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: 骚扰拦截
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        NSMicrophoneUsageDescription: 仅在您主动使用录音功能时采集麦克风。
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.troll.trollguard
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_ENTITLEMENTS: Entitlements/App.plist
+
+  CallDirectoryExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: CallDirectoryExtension
+      - path: Shared/RuleStore.swift   # 扩展只带规则存储，不带 4.5MB 号段库
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.troll.trollguard.calldirectory
+        CODE_SIGN_ENTITLEMENTS: Entitlements/CallDirectory.plist
+    info:
+      path: CallDirectoryExtension/Info.plist
+      properties:
+        CFBundleDisplayName: 拦截数据库
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.callkit.call-directory
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).CallDirectoryHandler
+
+  MessageFilterExtension:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: MessageFilterExtension
+      - path: Shared/RuleStore.swift   # 扩展只带规则存储，不带 4.5MB 号段库
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.troll.trollguard.messagefilter
+        CODE_SIGN_ENTITLEMENTS: Entitlements/MessageFilter.plist
+    info:
+      path: MessageFilterExtension/Info.plist
+      properties:
+        CFBundleDisplayName: 短信过滤
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.identitylookup.message-filter
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).MessageFilterHandler
