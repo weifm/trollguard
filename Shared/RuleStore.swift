@@ -192,10 +192,10 @@ enum RuleStore {
 
     /// 规则指纹（供扩展增量重建使用）
     static var fingerprint: String {
-        let nums = allBlockNumbers.joined(",")
-        let pres = allCallPrefixes.joined(",")
-        let kws  = smsKeywords.joined(",")
-        let cats = categories.map { "\($0.key)=\(categoryEnabled($0.key) ? 1 : 0)" }.joined(";")
+        let nums = allBlockNumbers.joined(separator: ",")
+        let pres = allCallPrefixes.joined(separator: ",")
+        let kws  = smsKeywords.joined(separator: ",")
+        let cats = categories.map { "\($0.key)=\(categoryEnabled($0.key) ? 1 : 0)" }.joined(separator: ";")
         return "\(blockingEnabled)-\(nums)-\(pres)-\(kws)-\(cats)"
     }
 }
