@@ -58,7 +58,7 @@ class CallDirectoryHandler: CXCallDirectoryProvider {
 }
 
 extension CallDirectoryHandler: CXCallDirectoryExtensionContextDelegate {
-    func requestFailed(for extensionContext: CXCallDirectoryExtensionContext) {
+    func requestFailed(for extensionContext: CXCallDirectoryExtensionContext, withError error: Error) {
         // 加载失败可在此记录
     }
 }
