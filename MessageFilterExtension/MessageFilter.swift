@@ -7,11 +7,11 @@ import IdentityLookup
 /// 1. 发件人命中黑名单 / 分类号码库中的号码
 /// 2. 发件人号码命中地区码 / 开头号码前缀（任意长度前缀均有效）
 /// 3. 正文包含任一关键词
-class MessageFilterHandler: ILMessageFilterExtension {
+class MessageFilterHandler: ILMessageFilterExtension, ILMessageFilterQueryHandling {
 
-    override func handle(_ queryRequest: ILMessageFilterQueryRequest,
-                         context: ILMessageFilterExtensionContext,
-                         completion: @escaping (ILMessageFilterQueryResponse) -> Void) {
+    func handle(_ queryRequest: ILMessageFilterQueryRequest,
+                context: ILMessageFilterExtensionContext,
+                completion: @escaping @Sendable (ILMessageFilterQueryResponse) -> Void) {
 
         let response = ILMessageFilterQueryResponse()
 
